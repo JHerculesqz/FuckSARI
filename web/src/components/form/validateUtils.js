@@ -322,6 +322,7 @@ export default {
       bIsValidate:false,
       strErrorTip:""
     };
+
     if(validatorInMo.ruleDigitRange && validatorInMo.ruleDigitRange.length > 0){
       var arrRanges = validatorInMo.ruleDigitRange;
 

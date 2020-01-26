@@ -441,6 +441,8 @@
 
   .column2 {
     width: calc(50% - 20px);
+    margin-top: 4px;
+    margin-bottom: 6px;
   }
 
   .column2:nth-child(odd) {

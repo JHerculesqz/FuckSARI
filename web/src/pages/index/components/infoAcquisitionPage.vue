@@ -1,10 +1,11 @@
 <template>
   <div class="formPageWrapper">
     <div class="contTitle">
-      调查问卷
+      健康信息反馈
     </div>
     <p class="contDescribe">
-      调查问卷信息描述，调查问卷信息描述，调查问卷信息描述，调查问卷信息描述，调查问卷信息描述，调查问卷信息描述。
+      肺炎逆施春黯然，壮行勇士挽狂澜。降魔豁命道艰险，无限爱心撼河山。
+      ——让我们科学应对，群防群控，硬核抗疫。
     </p>
     <div class="contentArea">
       <form-list :ref="sessionKeyName1[0]" :columnNum=1 :formLst="formLst1_0"></form-list>
@@ -97,7 +98,7 @@
           oAfterCallback(oRes);
         }else{
           HttpUtils.post("getAutoUserInfoByUserID", reqBody).then(res => {
-            oRes = res.resultObj;
+            oRes = res.data.resultObj;
             oAfterCallback(oRes);
           });
         }
@@ -137,7 +138,7 @@
 
         this.formLst1_0 = [{
           name: "姓名：",
-          key: "name",
+          key: "userId",
           type: "input",
           editVisible: true,
           placeHolder: "",
@@ -216,7 +217,10 @@
             validateType: "",
             ruleRegex: "",
             ruleStringRange: [],
-            ruleDigitRange: []
+            ruleDigitRange: [{
+              min:0,
+              max:100
+            }]
           },
           status: "",
           errMsg: "",
@@ -316,11 +320,21 @@
       },
 
       _getFormValue: function () {
+        var oFormLst1_0_validate = this.$refs[this.sessionKeyName1[0]].validateAll();
+        var oFormLst1_1_validate = this.$refs[this.sessionKeyName1[1]].validateAll();
+        var oFormLst1_2_validate = this.$refs[this.sessionKeyName1[2]].validateAll();
+        var oFormLst1_3_validate = this.$refs[this.sessionKeyName1[3]].validateAll();
+
+        if(!oFormLst1_0_validate || !oFormLst1_1_validate || !oFormLst1_2_validate || !oFormLst1_3_validate){
+          return undefined;
+        }
+
         var oFormLst1_0 = this.$refs[this.sessionKeyName1[0]].getValue();
+        var oFormLst1_1 = this.$refs[this.sessionKeyName1[1]].getValue();
         var oFormLst1_2 = this.$refs[this.sessionKeyName1[2]].getValue();
         var oFormLst1_3 = this.$refs[this.sessionKeyName1[3]].getValue();
 
-        var arrFormLstVal = [oFormLst1_0, oFormLst1_2, oFormLst1_3];
+        var arrFormLstVal = [oFormLst1_0, oFormLst1_1, oFormLst1_2, oFormLst1_3];
 
         var oValue = this._combineValue(arrFormLstVal);
         var oTargetValue = this._filterValueByDataRule(oValue);
@@ -358,11 +372,50 @@
       _onClickToConfirm: function () {
         var oValue = this._getFormValue();
         console.log(oValue);
-        console.log(JSON.stringify(oValue));
+
+        if(oValue == undefined){
+          return
+        }
+
+        var arrHealth = [];
+        var strHealth = "";
+        if(oValue.fever){
+          arrHealth.push("发热")
+        }
+        if(oValue.cough){
+          arrHealth.push("咳嗽")
+        }
+        if(oValue.cold){
+          arrHealth.push("感冒")
+        }
+        if(oValue.weak){
+          arrHealth.push("四肢无力")
+        }
+
+        for(var i = 0; i<arrHealth.length; i++){
+          if(i == 0){
+            strHealth = arrHealth[i];
+          }else{
+            strHealth = strHealth + ',' + arrHealth[i];
+          }
+        }
+
+        var reqBody = {
+          reqBuVoStr: JSON.stringify({
+            userId: oValue.userId,
+            userGroup: "",
+            location: oValue.sheng + "-" + oValue.shi,
+            temperature: parseFloat(oValue.temperature),
+            healthInfo: strHealth,
+          })
+        };
         if(this.debug){
+          console.log(reqBody);
           return oValue;
         }else{
-          buConfigInner.saveConfigVo4AxisJSResp(JSON.stringify(oValue));
+          HttpUtils.post("upsertUserInfo", reqBody).then(res => {
+
+          });
         }
       },
 
@@ -393,6 +446,7 @@
     text-align: center;
     font-size: 24px;
     color: #3399ff;
+    font-weight: bold;
   }
 
   .contDescribe{
@@ -413,7 +467,7 @@
     float: left;
     width: 100%;
     height: 100%;
-    font-size: 14px;
+    font-size: 16px;
     color: #666;
     line-height: 32px;
     white-space: nowrap;

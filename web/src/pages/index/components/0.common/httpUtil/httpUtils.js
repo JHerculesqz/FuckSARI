@@ -33,6 +33,13 @@ var API = {
     desc:R,
     errorAdvice:errorAdvice
   },
+  upsertUserInfo:{
+    url: "/upsertUserInfo",
+    loading:false,
+    checkRes:true,
+    desc:R,
+    errorAdvice:errorAdvice
+  }
 };
 
 export default {
