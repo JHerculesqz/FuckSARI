@@ -39,10 +39,10 @@ public class HealthTrackController {
 
     //#region saveUserInfo
 
-    @RequestMapping("/saveUserInfo")
+    @RequestMapping("/upsertUserInfo")
     @ResponseBody
-    public RespVo saveUserInfo(@RequestBody ReqVo oReqVo){
-        return this.healthTrackService.saveUserInfo(oReqVo);
+    public RespVo upsertUserInfo(@RequestBody ReqVo oReqVo){
+        return this.healthTrackService.upsertUserInfo(oReqVo);
     }
 
     //#endregion
