@@ -1,10 +1,11 @@
 package com.firelord.health_track;
 
 import com.firelord.component.ds.date.DateUtilsEx;
-import com.firelord.health_track.dao.tblHealthTrackUserInfo.TBLHealthTrackUserInfoRepository;
+import com.firelord.health_track.dao.tblHealthTrackUser.TBLHealthTrackUserRepository;
+import com.firelord.health_track.dao.tblHealthTrackUserHistory.TBLHealthTrackUserHistoryRepository;
 import com.firelord.health_track.vo.getAutoUserInfoByUserID.GetAutoUserInfoByUserIDInVo;
 import com.firelord.health_track.vo.getAutoUserInfoByUserID.GetAutoUserInfoByUserIDOutVo;
-import com.firelord.health_track.vo.saveUserInfo.SaveUserInfoInVo;
+import com.firelord.health_track.vo.upsertUserInfo.UpsertUserInfoInVo;
 import com.firelord.spring.component.misc.geo.IPLocationUtilsEx;
 import com.firelord.spring.component.misc.geo.vo.IPLocationOutVo;
 import com.firelord.spring.component.rpc.http.vo.ReqVo;
@@ -20,7 +21,9 @@ public class HealthTrackService {
     //#region Fields
 
     @Autowired
-    private TBLHealthTrackUserInfoRepository tblHealthTrackUserInfoRepository;
+    private TBLHealthTrackUserRepository tblHealthTrackUserRepository;
+    @Autowired
+    private TBLHealthTrackUserHistoryRepository tblHealthTrackUserInfoRepository;
 
     //#endregion
 
@@ -32,7 +35,7 @@ public class HealthTrackService {
      */
     public ModelAndView healthTrackInterview() {
         ModelAndView oModelAndView = new ModelAndView();
-        oModelAndView.setViewName("pages/healthTrackInterview/healthTrackInterview");
+        oModelAndView.setViewName("pages/healthTrackInterview/index");
         return oModelAndView;
     }
 
@@ -66,7 +69,7 @@ public class HealthTrackService {
 
     //#endregion
 
-    //#region saveUserInfo
+    //#region upsertUserInfo
 
     /**
      * 保存用户信息
@@ -77,10 +80,11 @@ public class HealthTrackService {
         RespVo oRespVo = new RespVo();
 
         //InVo
-        SaveUserInfoInVo oInVo = oReqVo.getReqBuVo(SaveUserInfoInVo.class);
+        UpsertUserInfoInVo oInVo = oReqVo.getReqBuVo(UpsertUserInfoInVo.class);
         oInVo.setFeedBackTime(DateUtilsEx.now(DateUtilsEx.TIMEZONE_8, DateUtilsEx.FORMAT3));
 
         //Provider
+        this.tblHealthTrackUserRepository.upsertEx(oInVo);
         this.tblHealthTrackUserInfoRepository.upsertEx(oInVo);
 
         //OutVo
@@ -88,4 +92,8 @@ public class HealthTrackService {
     }
 
     //#endregion
+
+    //#region getNotFeedBackUserList
+
+    //#engregion
 }

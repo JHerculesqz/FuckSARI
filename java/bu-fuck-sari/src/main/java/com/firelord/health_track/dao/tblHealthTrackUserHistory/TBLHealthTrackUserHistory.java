@@ -1,16 +1,13 @@
-package com.firelord.health_track.dao.tblHealthTrackUserInfo;
+package com.firelord.health_track.dao.tblHealthTrackUserHistory;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-/**
- * TBLCompany
- */
 @ToString
-@Document(collection = "TBLHealthTrackUserInfo")
-public class TBLHealthTrackUserInfo {
+@Document(collection = "TBLHealthTrackUserHistory")
+public class TBLHealthTrackUserHistory {
     //#region Fields
 
     /**
@@ -19,6 +16,13 @@ public class TBLHealthTrackUserInfo {
     @Setter
     @Getter
     private String userId;
+
+    /**
+     * 公司/部门/社区信息
+     */
+    @Setter
+    @Getter
+    private String userGroup;
 
     /**
      * 所在地(例如：湖北省-武汉市)
