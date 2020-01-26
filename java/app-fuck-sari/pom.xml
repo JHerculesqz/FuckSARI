@@ -29,10 +29,14 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>com.github.jherculesqz</groupId>
-            <artifactId>core-fw-spring-security</artifactId>
-            <version>1.0.0-a1</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+        <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.firelord</groupId>
             <artifactId>bu-fuck-sari</artifactId>

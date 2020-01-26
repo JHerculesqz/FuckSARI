@@ -1,5 +1,7 @@
 package com.firelord;
 
+import com.firelord.spring.component.mvc.startup.IInitAuto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,8 +16,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class FuckSARIApplication implements ApplicationRunner {
     //#region Fields
 
-//    @Autowired
-//    private IInitAuto initAuto;
+    @Autowired
+    private IInitAuto initAuto;
 
     //#endregion
 
@@ -31,7 +33,7 @@ public class FuckSARIApplication implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-//        this.initAuto.run();
+        this.initAuto.run();
     }
 
     //#endregion
