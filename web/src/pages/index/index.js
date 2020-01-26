@@ -22,12 +22,12 @@ const i18n = new VueI18n({
   }
 });
 
-Vue.http.interceptors.push((request, next) => {
-  request.headers.set(window.csrfHeader, window.csrfToken);
-  next(function (response) {
-    return response;
-  });
-});
+// Vue.http.interceptors.push((request, next) => {
+//   request.headers.set(window.csrfHeader, window.csrfToken);
+//   next(function (response) {
+//     return response;
+//   });
+// });
 
 new Vue({
   el: '#app',

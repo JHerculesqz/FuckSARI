@@ -479,12 +479,13 @@
   .required {
     position: absolute;
     color: #ff4040;
-    top: -0px;
-    left: -10px;
+    top: 0;
+    left: 0;
   }
 
   .labelArea {
     float: left;
+    padding-left: 8px;
     height: 100%;
     font-size: 16px;
     color: #666;

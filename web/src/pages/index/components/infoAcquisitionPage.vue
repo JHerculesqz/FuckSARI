@@ -9,8 +9,10 @@
     <div class="contentArea">
       <form-list :ref="sessionKeyName1[0]" :columnNum=1 :formLst="formLst1_0"></form-list>
       <div class="labelArea">当前所在地：</div>
-      <form-list :ref="sessionKeyName1[2]" :columnNum=10 :formLst="formLst1_2"></form-list>
-      <form-list :ref="sessionKeyName1[3]" :columnNum=1 :formLst="formLst1_3"></form-list>
+      <form-list :ref="sessionKeyName1[1]" :columnNum=10 :formLst="formLst1_1"></form-list>
+      <form-list :ref="sessionKeyName1[2]" :columnNum=1 :formLst="formLst1_2"></form-list>
+      <div class="labelArea">身体是否有异常情况：</div>
+      <form-list :ref="sessionKeyName1[3]" :columnNum=2 :formLst="formLst1_3"></form-list>
     </div>
     <marvel-button ref="confirm" label="提交" classCustom="classCustom4LicenseBtn" size="large"
                    v-on:onClick="_onClickToConfirm"></marvel-button>
@@ -18,9 +20,12 @@
 </template>
 
 <script>
+  import HttpUtils from "./0.common/httpUtil/httpUtils";
   import FormList from "../../../components/form/formList";
   import MarvelButton from '~/widget/btn/MarvelButton';
-  import oMockUtils from "./mock"
+  import CookieUtils from '~/component/cookie';
+  import StrUtils from '~/component/str';
+  import oMockUtils from "./0.common/mock"
 
   export default {
     name: 'infoAcquisitionPage',
@@ -32,12 +37,13 @@
     data() {
       return {
         /*region const*/
-        debug: true,
+        debug: false,
         /*endregion*/
         /*region form*/
-        sessionKeyName1:["form_0", "form_1", "form_2"],
+        sessionKeyName1:["form_0", "form_1", "form_2", "form_3"],
 
         formLst1_0:[],
+        formLst1_1:[],
         formLst1_2:[],
         formLst1_3:[],
         /*endregion*/
@@ -78,19 +84,56 @@
       //#endregion
 
       _loadConfigVo: function(oAfterCallback){
+        var self = this;
         var oRes = {};
+        var reqBody = {
+          reqBuVoStr: JSON.stringify({
+            userId: CookieUtils.getCookie("userId") == null ?"":CookieUtils.getCookie("userId"),
+          })
+        };
         if(this.debug){
-          oRes = oMockUtils.mock4LoadConfigVo();
+          console.log(reqBody);
+          oRes = oMockUtils.mock4LoadConfigVo().resultObj;
+          oAfterCallback(oRes);
         }else{
-          var strRes =  buConfigInner.loadConfigVo4AxisJSResp();
-          oRes = JSON.parse(strRes);
+          HttpUtils.post("getAutoUserInfoByUserID", reqBody).then(res => {
+            oRes = res.resultObj;
+            oAfterCallback(oRes);
+          });
         }
-
-        oAfterCallback(oRes);
       },
 
       _setConfigVo: function(oRes){
         /*region formLst1*/
+
+        CookieUtils.setCookie("userId", oRes.userId);
+
+        var strSheng ="";
+        var strShi = "";
+        if(oRes.location != "" && oRes.location != undefined){
+          var arrStr = StrUtils.split(oRes.location, "-");
+          strSheng = arrStr[0];
+          strShi = arrStr[1];
+        }
+
+        var bFever = false;
+        var bCough = false;
+        var bCold = false;
+        var bWeak = false;
+        if(oRes.healthInfo != "" && oRes.healthInfo != undefined){
+          var arrStr = StrUtils.split(oRes.healthInfo, ",");
+          for(var i = 0; i<arrStr.length; i++){
+            if(arrStr[i] == "发热"){
+              bFever = true;
+            }else if(arrStr[i] == "咳嗽"){
+              bCough = true;
+            }else if(arrStr[i] == "感冒"){
+              bCold = true;
+            }else if(arrStr[i] == "四肢无力"){
+              bWeak = true;
+            }
+          }
+        }
 
         this.formLst1_0 = [{
           name: "姓名：",
@@ -112,17 +155,17 @@
           },
           status: "",
           errMsg: "",
-          defaultValue: oRes.distanceRangeX
+          defaultValue: oRes.userId
         }];
-        this.formLst1_2 = [{
+        this.formLst1_1 = [{
           name: "省：",
           key: "sheng",
-          type: "dropdown",
+          type: "input",
           editVisible: true,
           placeHolder: "",
           size: "normal",
-          labelBeforeW: "35px",
-          labelFormW: "calc(100% - 35px)",
+          labelBeforeW: "42px",
+          labelFormW: "calc(100% - 42px)",
           labelAfterW: "",
           afterText: "",
           validatorRule: {
@@ -132,25 +175,18 @@
             ruleStringRange: [],
             ruleDigitRange: []
           },
-          dropItems: [{
-            label: "是",
-            active: false,
-          }, {
-            label: "否",
-            active: true,
-          }],
           status: "",
           errMsg: "",
-          defaultValue: ""
+          defaultValue: strSheng
         },{
           name: "市：",
           key: "shi",
-          type: "dropdown",
+          type: "input",
           editVisible: true,
           placeHolder: "",
           size: "normal",
-          labelBeforeW: "35px",
-          labelFormW: "calc(100% - 35px)",
+          labelBeforeW: "42px",
+          labelFormW: "calc(100% - 42px)",
           labelAfterW: "",
           afterText: "",
           validatorRule: {
@@ -160,18 +196,11 @@
             ruleStringRange: [],
             ruleDigitRange: []
           },
-          dropItems: [{
-            label: "是",
-            active: false,
-          }, {
-            label: "否",
-            active: true,
-          }],
           status: "",
           errMsg: "",
-          defaultValue: ""
+          defaultValue: strShi
         }];
-        this.formLst1_3 = [{
+        this.formLst1_2 = [{
           name: "当前体温(℃)：",
           key: "temperature",
           type: "input",
@@ -191,35 +220,96 @@
           },
           status: "",
           errMsg: "",
-          defaultValue: oRes.distanceRangeX
-        },{
-          name: "是与否疑似病例有接触：",
-          key: "touch",
-          type: "dropdown",
+          defaultValue: oRes.temperature
+        }];
+        this.formLst1_3 = [{
+          name: "发热",
+          key: "fever",
+          type: "checkBox",
           editVisible: true,
           placeHolder: "",
-          size: "normal",
-          labelBeforeW: "100%",
-          labelFormW: "100%",
+          size: "",
+          labelBeforeW: "",
+          labelFormW: "",
           labelAfterW: "",
           afterText: "",
           validatorRule: {
-            require: true,
+            require: false,
             validateType: "",
             ruleRegex: "",
             ruleStringRange: [],
             ruleDigitRange: []
           },
-          dropItems: [{
-            label: "是",
-            active: false,
-          }, {
-            label: "否",
-            active: true,
-          }],
+          hasTip: false,
           status: "",
           errMsg: "",
-          defaultValue: ""
+          defaultValue: bFever
+        },{
+          name: "咳嗽",
+          key: "cough",
+          type: "checkBox",
+          editVisible: true,
+          placeHolder: "",
+          size: "",
+          labelBeforeW: "",
+          labelFormW: "",
+          labelAfterW: "",
+          afterText: "",
+          validatorRule: {
+            require: false,
+            validateType: "",
+            ruleRegex: "",
+            ruleStringRange: [],
+            ruleDigitRange: []
+          },
+          hasTip: false,
+          status: "",
+          errMsg: "",
+          defaultValue: bCough
+        },{
+          name: "感冒",
+          key: "cold",
+          type: "checkBox",
+          editVisible: true,
+          placeHolder: "",
+          size: "",
+          labelBeforeW: "",
+          labelFormW: "",
+          labelAfterW: "",
+          afterText: "",
+          validatorRule: {
+            require: false,
+            validateType: "",
+            ruleRegex: "",
+            ruleStringRange: [],
+            ruleDigitRange: []
+          },
+          hasTip: false,
+          status: "",
+          errMsg: "",
+          defaultValue: bCold
+        },{
+          name: "四肢无力",
+          key: "weak",
+          type: "checkBox",
+          editVisible: true,
+          placeHolder: "",
+          size: "",
+          labelBeforeW: "",
+          labelFormW: "",
+          labelAfterW: "",
+          afterText: "",
+          validatorRule: {
+            require: false,
+            validateType: "",
+            ruleRegex: "",
+            ruleStringRange: [],
+            ruleDigitRange: []
+          },
+          hasTip: false,
+          status: "",
+          errMsg: "",
+          defaultValue: bWeak
         }];
 
         /*endregion*/
@@ -315,8 +405,8 @@
 
   .contentArea{
     width: 80%;
-    overflow: visible;
-    margin: 0 auto;
+    overflow: hidden;
+    margin: 0 auto 20px auto;
   }
 
   .labelArea{
