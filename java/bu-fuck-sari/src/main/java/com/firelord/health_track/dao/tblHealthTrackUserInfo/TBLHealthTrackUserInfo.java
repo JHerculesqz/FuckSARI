@@ -42,5 +42,9 @@ public class TBLHealthTrackUserInfo {
     @Getter
     private String healthInfo;
 
+    @Setter
+    @Getter
+    private String feedBackTime;
+
     //#endregion
 }

@@ -1,28 +1,11 @@
 package com.firelord.health_track.vo.getAutoUserInfoByUserID;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.firelord.health_track.dao.tblHealthTrackUserInfo.TBLHealthTrackUserInfo;
 import lombok.ToString;
 
 @ToString
-public class GetAutoUserInfoByUserIDOutVo {
+public class GetAutoUserInfoByUserIDOutVo extends TBLHealthTrackUserInfo {
     //#region Fields
-
-    @Setter
-    @Getter
-    private String userId;
-
-    @Setter
-    @Getter
-    private String location;
-
-    @Setter
-    @Getter
-    private double temperature;
-
-    @Setter
-    @Getter
-    private String healthInfo;
 
     //#endregion
 }

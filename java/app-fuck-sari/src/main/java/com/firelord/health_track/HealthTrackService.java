@@ -1,5 +1,6 @@
 package com.firelord.health_track;
 
+import com.firelord.component.ds.date.DateUtilsEx;
 import com.firelord.health_track.dao.tblHealthTrackUserInfo.TBLHealthTrackUserInfoRepository;
 import com.firelord.health_track.vo.getAutoUserInfoByUserID.GetAutoUserInfoByUserIDInVo;
 import com.firelord.health_track.vo.getAutoUserInfoByUserID.GetAutoUserInfoByUserIDOutVo;
@@ -72,14 +73,15 @@ public class HealthTrackService {
      * @param oReqVo SaveUserInfoInVo
      * @return RespVo
      */
-    public RespVo saveUserInfo(ReqVo oReqVo) {
+    public RespVo upsertUserInfo(ReqVo oReqVo) {
         RespVo oRespVo = new RespVo();
 
         //InVo
         SaveUserInfoInVo oInVo = oReqVo.getReqBuVo(SaveUserInfoInVo.class);
+        oInVo.setFeedBackTime(DateUtilsEx.now(DateUtilsEx.TIMEZONE_8, DateUtilsEx.FORMAT3));
 
         //Provider
-        this.tblHealthTrackUserInfoRepository.save(oInVo.trans2DB());
+        this.tblHealthTrackUserInfoRepository.upsertEx(oInVo);
 
         //OutVo
         return oRespVo;
