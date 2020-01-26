@@ -31,7 +31,7 @@ public class HealthTrackController {
     @RequestMapping("/getAutoUserInfoByUserID")
     @ResponseBody
     public RespVo getAutoUserInfoByUserID(@RequestBody ReqVo oReqVo,
-                                          HttpServletRequest oHttpServletRequest){
+                                          HttpServletRequest oHttpServletRequest) {
         return this.healthTrackService.getAutoUserInfoByUserID(oReqVo, oHttpServletRequest);
     }
 
@@ -41,7 +41,7 @@ public class HealthTrackController {
 
     @RequestMapping("/upsertUserInfo")
     @ResponseBody
-    public RespVo upsertUserInfo(@RequestBody ReqVo oReqVo){
+    public RespVo upsertUserInfo(@RequestBody ReqVo oReqVo) {
         return this.healthTrackService.upsertUserInfo(oReqVo);
     }
 
