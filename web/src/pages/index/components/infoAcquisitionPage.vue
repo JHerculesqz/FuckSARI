@@ -1,11 +1,10 @@
 <template>
   <div class="formPageWrapper">
     <div class="contTitle">
-      健康信息反馈
+      {{year}}年{{month}}月{{day}}日健康打卡
     </div>
     <p class="contDescribe">
-      肺炎逆施春黯然，壮行勇士挽狂澜。降魔豁命道艰险，无限爱心撼河山。
-      ——让我们科学应对，群防群控，硬核抗疫。
+      群防群控，硬核抗疫，请大家做好防护，保护好自己和家人。坚信这一切终将过去，我们会摘下口罩，一如既往，去想去的地方，见想见的人，吃想吃的美食，让我们一起加油！
     </p>
     <div class="contentArea">
       <form-list :ref="sessionKeyName1[0]" :columnNum=1 :formLst="formLst1_0"></form-list>
@@ -26,6 +25,7 @@
   import MarvelButton from '~/widget/btn/MarvelButton';
   import CookieUtils from '~/component/cookie';
   import StrUtils from '~/component/str';
+  import DateUtils from '~/component/date';
   import oMockUtils from "./0.common/mock"
 
   export default {
@@ -39,6 +39,11 @@
       return {
         /*region const*/
         debug: false,
+        /*endregion*/
+        /*region date*/
+        year:"",
+        month:"",
+        day:"",
         /*endregion*/
         /*region form*/
         sessionKeyName1:["form_0", "form_1", "form_2", "form_3"],
@@ -74,6 +79,10 @@
 
       _initEx: function () {
         var self = this;
+        var oDate = DateUtils.nowByObj();
+        this.year = oDate.year;
+        this.month = oDate.month;
+        this.day = oDate.day;
         this._loadConfigVo(function (oRes) {
           self._setConfigVo(oRes);
         });
@@ -371,7 +380,6 @@
 
       _onClickToConfirm: function () {
         var oValue = this._getFormValue();
-        console.log(oValue);
 
         if(oValue == undefined){
           return
@@ -434,15 +442,15 @@
     width: 100%;
     height: 100%;
     position: relative;
-    overflow: hidden;
+    overflow: auto;
     background: url("../../../../static/images/dun.svg") no-repeat center;
     background-size: contain;
   }
 
   .contTitle{
     width: 100%;
-    height: 60px;
-    line-height: 60px;
+    height: 70px;
+    line-height: 70px;
     text-align: center;
     font-size: 24px;
     color: #3399ff;
