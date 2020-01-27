@@ -46,4 +46,24 @@ public class HealthTrackController {
     }
 
     //#endregion
+
+    //#region getPieData
+
+    @RequestMapping("/getPieData")
+    @ResponseBody
+    public RespVo getPieData(@RequestBody ReqVo oReqVo) {
+        return this.healthTrackService.getPieData(oReqVo);
+    }
+
+    //#endregion
+
+    //#region getGridData
+
+    @RequestMapping("/getGridData")
+    @ResponseBody
+    public RespVo getGridData(@RequestBody ReqVo oReqVo) {
+        return this.healthTrackService.getGridData(oReqVo);
+    }
+
+    //#endregion
 }
