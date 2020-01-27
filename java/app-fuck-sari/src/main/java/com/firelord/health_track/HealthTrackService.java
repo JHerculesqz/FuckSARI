@@ -2,11 +2,15 @@ package com.firelord.health_track;
 
 import com.firelord.component.ds.date.DateUtilsEx;
 import com.firelord.health_track.dao.tblHealthTrackUser.TBLHealthTrackUserRepository;
+import com.firelord.health_track.dao.tblHealthTrackUserHistory.TBLHealthTrackUserHistory;
 import com.firelord.health_track.dao.tblHealthTrackUserHistory.TBLHealthTrackUserHistoryRepository;
 import com.firelord.health_track.vo.getAutoUserInfoByUserID.GetAutoUserInfoByUserIDInVo;
 import com.firelord.health_track.vo.getAutoUserInfoByUserID.GetAutoUserInfoByUserIDOutVo;
 import com.firelord.health_track.vo.getGridData.GetGridDataInVo;
 import com.firelord.health_track.vo.getGridData.GridVo;
+import com.firelord.health_track.vo.getLineData.GetLineDataHistoryInVo;
+import com.firelord.health_track.vo.getLineData.LineVo;
+import com.firelord.health_track.vo.getLineData.PointVo;
 import com.firelord.health_track.vo.getPieData.GetPieDataInVo;
 import com.firelord.health_track.vo.getPieData.GetPieDataOutVo;
 import com.firelord.health_track.vo.upsertUserInfo.UpsertUserInfoInVo;
@@ -19,6 +23,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Component
 public class HealthTrackService {
@@ -27,7 +32,7 @@ public class HealthTrackService {
     @Autowired
     private TBLHealthTrackUserRepository tblHealthTrackUserRepository;
     @Autowired
-    private TBLHealthTrackUserHistoryRepository tblHealthTrackUserInfoRepository;
+    private TBLHealthTrackUserHistoryRepository tblHealthTrackUserHistoryRepository;
 
     //#endregion
 
@@ -41,6 +46,17 @@ public class HealthTrackService {
     public ModelAndView healthTrackInterview() {
         ModelAndView oModelAndView = new ModelAndView();
         oModelAndView.setViewName("pages/healthTrackInterview/index");
+        return oModelAndView;
+    }
+
+    /**
+     * 获得healthTrack统计页面
+     *
+     * @return healthTrack统计页面
+     */
+    public ModelAndView healthTrackDashboard() {
+        ModelAndView oModelAndView = new ModelAndView();
+        oModelAndView.setViewName("pages/healthTrackDashboard/index");
         return oModelAndView;
     }
 
@@ -91,8 +107,11 @@ public class HealthTrackService {
         oInVo.setFeedBackTime(DateUtilsEx.now(DateUtilsEx.TIMEZONE_8, DateUtilsEx.FORMAT3));
 
         //Provider
+        if (!this.tblHealthTrackUserRepository.existsByUserId(oInVo.getUserId())) {
+            return RespVo.genRespVo4Err("用户不在白名单内");
+        }
         this.tblHealthTrackUserRepository.upsertEx(oInVo);
-        this.tblHealthTrackUserInfoRepository.upsertEx(oInVo);
+        this.tblHealthTrackUserHistoryRepository.upsertEx(oInVo);
 
         //OutVo
         return oRespVo;
@@ -122,7 +141,7 @@ public class HealthTrackService {
         return oRespVo;
     }
 
-    //#engregion
+    //#endregion
 
     //#region getGridData
 
@@ -143,6 +162,32 @@ public class HealthTrackService {
 
         //OutVo
         oRespVo.setResultObj(oGridVo);
+        return oRespVo;
+    }
+
+    //#endregion
+
+    //#region getLineDataHistory
+
+    public RespVo getLineDataHistory(ReqVo oReqVo) {
+        RespVo oRespVo = new RespVo();
+
+        //InVo
+        GetLineDataHistoryInVo oInVo = oReqVo.getReqBuVo(GetLineDataHistoryInVo.class);
+
+        //Provider
+        List<TBLHealthTrackUserHistory> lstRes = this.tblHealthTrackUserHistoryRepository.
+                findByUserId(oInVo.getUserId());
+        LineVo oLineVo = new LineVo();
+        for (TBLHealthTrackUserHistory oTBLHealthTrackUser : lstRes) {
+            PointVo oPointVo = new PointVo();
+            oPointVo.setKey(oTBLHealthTrackUser.getFeedBackTime());
+            oPointVo.setValue(oTBLHealthTrackUser.getTemperature());
+            oLineVo.getPointVoList().add(oPointVo);
+        }
+
+        //OutVo
+        oRespVo.setResultObj(oLineVo);
         return oRespVo;
     }
 

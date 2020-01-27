@@ -29,14 +29,14 @@ public class TBLHealthTrackUserHistory {
      */
     @Setter
     @Getter
-    private String location;
+    private String location = "湖北省-武汉市";
 
     /**
      * 体温(整数，单位摄氏度)
      */
     @Setter
     @Getter
-    private double temperature;
+    private double temperature = 36;
 
     /**
      * 身体异常情况

@@ -24,6 +24,11 @@ public class HealthTrackController {
         return this.healthTrackService.healthTrackInterview();
     }
 
+    @RequestMapping(value = {"/healthTrackDashboard"}, method = RequestMethod.GET)
+    public ModelAndView healthTrackDashboard() {
+        return this.healthTrackService.healthTrackDashboard();
+    }
+
     //#endregion
 
     //#region getAutoUserInfoByUserID
@@ -63,6 +68,16 @@ public class HealthTrackController {
     @ResponseBody
     public RespVo getGridData(@RequestBody ReqVo oReqVo) {
         return this.healthTrackService.getGridData(oReqVo);
+    }
+
+    //#endregion
+
+    //#region getLineDataHistory
+
+    @RequestMapping("/getLineDataHistory")
+    @ResponseBody
+    public RespVo getLineDataHistory(@RequestBody ReqVo oReqVo) {
+        return this.healthTrackService.getLineDataHistory(oReqVo);
     }
 
     //#endregion

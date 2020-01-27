@@ -12,11 +12,17 @@ import org.springframework.stereotype.Component;
 @Component
 @Log4j2
 public class InitAuto4Debug extends InitAuto4Common implements IInitAuto {
+    //#region Fields
+
+    //#endregion
+
     //#region run
 
     @Override
     public void run() {
         log.info(LOG_INIT_AUTO + "start...");
+
+        this.initWhiteList("C:/test/FuckSARI/");
 
         log.info(LOG_INIT_AUTO + "end...");
     }

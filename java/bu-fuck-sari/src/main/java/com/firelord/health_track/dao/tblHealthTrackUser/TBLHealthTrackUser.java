@@ -22,4 +22,14 @@ public class TBLHealthTrackUser extends TBLHealthTrackUserHistory {
     private boolean feedBackToday = false;
 
     //#endregion
+
+    //#region trans4InitWhiteList
+
+    public static TBLHealthTrackUser trans4InitWhiteList(String strUserID) {
+        TBLHealthTrackUser oTBLHealthTrackUser = new TBLHealthTrackUser();
+        oTBLHealthTrackUser.setUserId(strUserID);
+        return oTBLHealthTrackUser;
+    }
+
+    //#endregion
 }

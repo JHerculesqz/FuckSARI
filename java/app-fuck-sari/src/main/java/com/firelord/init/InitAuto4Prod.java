@@ -18,6 +18,8 @@ public class InitAuto4Prod extends InitAuto4Common implements IInitAuto {
     public void run() {
         log.info(LOG_INIT_AUTO + "start...");
 
+        this.initWhiteList("/FuckSARI/");
+
         log.info(LOG_INIT_AUTO + "end...");
     }
 
