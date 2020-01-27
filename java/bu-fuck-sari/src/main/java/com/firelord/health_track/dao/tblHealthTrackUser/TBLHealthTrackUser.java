@@ -19,7 +19,7 @@ public class TBLHealthTrackUser extends TBLHealthTrackUserHistory {
      */
     @Setter
     @Getter
-    private boolean feedBackToday;
+    private boolean feedBackToday = false;
 
     //#endregion
 }

@@ -5,6 +5,10 @@ import com.firelord.health_track.dao.tblHealthTrackUser.TBLHealthTrackUserReposi
 import com.firelord.health_track.dao.tblHealthTrackUserHistory.TBLHealthTrackUserHistoryRepository;
 import com.firelord.health_track.vo.getAutoUserInfoByUserID.GetAutoUserInfoByUserIDInVo;
 import com.firelord.health_track.vo.getAutoUserInfoByUserID.GetAutoUserInfoByUserIDOutVo;
+import com.firelord.health_track.vo.getGridData.GetGridDataInVo;
+import com.firelord.health_track.vo.getGridData.GridVo;
+import com.firelord.health_track.vo.getPieData.GetPieDataInVo;
+import com.firelord.health_track.vo.getPieData.GetPieDataOutVo;
 import com.firelord.health_track.vo.upsertUserInfo.UpsertUserInfoInVo;
 import com.firelord.spring.component.misc.geo.IPLocationUtilsEx;
 import com.firelord.spring.component.misc.geo.vo.IPLocationOutVo;
@@ -47,8 +51,8 @@ public class HealthTrackService {
     /**
      * 获得自动填写的用户数据，自动填充在问卷调查页面
      *
-     * @param oReqVo UserInfoInVo
-     * @return UserInfoOutVo
+     * @param oReqVo ReqVo
+     * @return RespVo
      */
     public RespVo getAutoUserInfoByUserID(ReqVo oReqVo, HttpServletRequest oHttpServletRequest) {
         RespVo oRespVo = new RespVo();
@@ -76,7 +80,7 @@ public class HealthTrackService {
     /**
      * 保存用户信息
      *
-     * @param oReqVo SaveUserInfoInVo
+     * @param oReqVo ReqVo
      * @return RespVo
      */
     public RespVo upsertUserInfo(ReqVo oReqVo) {
@@ -96,7 +100,51 @@ public class HealthTrackService {
 
     //#endregion
 
-    //#region getNotFeedBackUserList
+    //#region getPieData
+
+    /**
+     * 获得饼图数据
+     *
+     * @param oReqVo ReqVo
+     * @return RespVo
+     */
+    public RespVo getPieData(ReqVo oReqVo) {
+        RespVo oRespVo = new RespVo();
+
+        //InVo
+        GetPieDataInVo oInVo = oReqVo.getReqBuVo(GetPieDataInVo.class);
+
+        //Provider
+        GetPieDataOutVo oOutVo = this.tblHealthTrackUserRepository.getPieDataByType(oInVo);
+
+        //OutVo
+        oRespVo.setResultObj(oOutVo);
+        return oRespVo;
+    }
 
     //#engregion
+
+    //#region getGridData
+
+    /**
+     * 获得表格数据
+     *
+     * @param oReqVo ReqVo
+     * @return RespVo
+     */
+    public RespVo getGridData(ReqVo oReqVo) {
+        RespVo oRespVo = new RespVo();
+
+        //InVo
+        GetGridDataInVo oInVo = oReqVo.getReqBuVo(GetGridDataInVo.class);
+
+        //Provider
+        GridVo oGridVo = this.tblHealthTrackUserRepository.getGridDataByType(oInVo);
+
+        //OutVo
+        oRespVo.setResultObj(oGridVo);
+        return oRespVo;
+    }
+
+    //#endregion
 }
