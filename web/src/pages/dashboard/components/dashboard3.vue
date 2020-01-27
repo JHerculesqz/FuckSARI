@@ -13,11 +13,13 @@
                       :titles="titles"
                       :rows="rows"
                       :limit="limit"
+                      :totalNum="totalNum"
+                      :dynamicPaging="true"
                       :canDrag="false"
                       :hasFoot="true"
                       :columnConfig="false"
                       :showChangeLimit="false"
-                      v-on:onIconClick="_onIconClick"
+                      v-on:onIconClick="callback4OnIconClick"
                       v-on:onPageChange="_onPageChange"></marvel-table>
       </div>
     </div>
@@ -88,6 +90,12 @@
         /*endregion*/
         /*region grid*/
         titles:[{
+          label: "ID",
+          key: "id",
+          type: "text",
+          visible: false,
+          width: "100px",
+        },{
           label: "用户",
           key: "userId",
           type: "text",
@@ -221,6 +229,10 @@
         for(var i = 0; i< arrRowsVo.length; i++){
           var oRow = arrRowsVo[i].cellVos;
           oRow.push({
+            key: "id",
+            value: StrUtils.uuid(),
+          });
+          oRow.push({
             key: "operation",
             value: [{
               value: "icon-stats-dots",
@@ -252,10 +264,8 @@
         this.iPage = iPage;
       },
 
-      _onIconClick: function (oRow, oCell, oIcon) {
-        console.log(oRow);
-        console.log(oCell);
-        console.log(oIcon);
+      callback4OnIconClick: function (oRow, oCell, oIcon) {
+        this.$emit("showHistory", oRow);
       },
 
       //#endregion
@@ -283,7 +293,7 @@
   }
 
   .rightArea{
-    width: calc(100% - 400px);
+    width: calc(100% - 410px);
     height: 100%;
     float: left;
   }

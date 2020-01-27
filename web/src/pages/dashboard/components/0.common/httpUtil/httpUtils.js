@@ -39,6 +39,13 @@ var API = {
     checkRes:true,
     desc:R,
     errorAdvice:errorAdvice
+  },
+  getLineDataHistory:{
+    url: "/getLineDataHistory",
+    loading:false,
+    checkRes:true,
+    desc:R,
+    errorAdvice:errorAdvice
   }
 };
 

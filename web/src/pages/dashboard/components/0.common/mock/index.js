@@ -65,5 +65,23 @@ export default {
       "errorObj": null,
       "ok": true
     }
-  }
+  },
+  mock4GetLineData: function () {
+    return {
+      "resultObj": {
+        "pointVoList": [
+          {
+            "name": "2020-01-27",
+            "value": ["2020-01-27", 10.0]
+          },
+          {
+            "name": "2020-01-28",
+            "value": ["2020-01-28", 39.0]
+          }
+        ]
+      },
+      "errorObj": null,
+      "ok": true
+    }
+  },
 }

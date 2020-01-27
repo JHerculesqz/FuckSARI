@@ -5,31 +5,39 @@
         <marvel-dashboard title="人员状态分布">
           <div slot="customArea"></div>
           <div slot="contArea" style="height: 100%;overflow:auto;">
-            <dashboard1></dashboard1>
+            <dashboard1 @showHistory="_showHistory"></dashboard1>
+          </div>
+        </marvel-dashboard>
+      </div>
+    </div>
+    <div class="centerArea">
+      <div class="dashboardStyle dashboardStyle2">
+        <marvel-dashboard title="人员地区分布">
+          <div slot="customArea"></div>
+          <div slot="contArea" style="height: 100%;overflow:auto;">
+            <dashboard2 @showHistory="_showHistory"></dashboard2>
           </div>
         </marvel-dashboard>
       </div>
     </div>
     <div class="bottomArea">
-      <div class="dashboardStyle dashboardStyle2">
-        <marvel-dashboard title="人员地区分布">
-          <div slot="customArea"></div>
-          <div slot="contArea" style="height: 100%;overflow:auto;">
-            <dashboard2></dashboard2>
-          </div>
-        </marvel-dashboard>
-      </div>
       <div class="dashboardStyle dashboardStyle3">
         <marvel-dashboard title="人员反馈情况">
           <div slot="customArea"></div>
           <div slot="contArea" style="height: 100%;overflow:auto;">
-            <dashboard3></dashboard3>
+            <dashboard3 @showHistory="_showHistory"></dashboard3>
           </div>
         </marvel-dashboard>
       </div>
 
     </div>
-    <div class="logoArea"></div>
+    <marvel-dialog :showDialog="showDialog" :canDrag="true" :hasFoot="false"
+                   title="历史数据" :width="800" :height="600"
+                   v-on:onClickDialogClose="_onClickDialogClose">
+      <div v-if="showDialog" slot="dialogCont" style="width: 100%;height: 100%">
+        <dialog-cont :userId="userId"></dialog-cont>
+      </div>
+    </marvel-dialog>
   </div>
 </template>
 
@@ -38,6 +46,7 @@
   import FormList from "../../../components/form/formList";
   import MarvelDashboard from '~/widget/dboard/MarvelDashboard';
   import MarvelButton from '~/widget/btn/MarvelButton';
+  import MarvelDialog from '~/widget/dialog/MarvelDialog';
   import CookieUtils from '~/component/cookie';
   import StrUtils from '~/component/str';
   import DateUtils from '~/component/date';
@@ -45,16 +54,19 @@
   import Dashboard1 from "./dashboard1";
   import Dashboard2 from "./dashboard2";
   import Dashboard3 from "./dashboard3";
+  import DialogCont from "./dialogCont";
 
   export default {
     name: 'dashboardPage',
     components: {
+      DialogCont,
       Dashboard3,
       Dashboard2,
       Dashboard1,
       FormList,
       MarvelButton,
-      MarvelDashboard
+      MarvelDashboard,
+      MarvelDialog
     },
     props: {},
     data() {
@@ -62,6 +74,8 @@
         /*region const*/
         debug: false,
         /*endregion*/
+        showDialog: false,
+        userId:""
       }
     },
     mounted: function () {
@@ -91,6 +105,24 @@
 
       //#endregion
 
+      _showHistory: function (oRow) {
+        this.userId = this._getCellByKey(oRow, "userId").value;
+        this.showDialog = true
+      },
+
+      _onClickDialogClose: function () {
+        this.showDialog = false
+      },
+
+      _getCellByKey: function (oRow, key) {
+        for(var i = 0; i<oRow.length; i++){
+          var oCell = oRow[i];
+          if(oCell.key == key){
+            return oCell;
+          }
+        }
+      }
+
       //#endregion
       //#region callback
       //#endregion
@@ -117,6 +149,13 @@
     box-sizing: border-box;
   }
 
+  .centerArea{
+    height: 50%;
+    width: 100%;
+    padding: 0 10px 0 10px;
+    box-sizing: border-box;
+  }
+
   .bottomArea{
     height: 50%;
     width: 100%;
@@ -124,35 +163,11 @@
     box-sizing: border-box;
   }
 
-  .logoArea{
-    position: absolute;
-    width: 60%;
-    height: 60%;
-    top: 20%;
-    left: 20%;
-    /*background: url("../../../../static/images/dun.svg") no-repeat center;*/
-    /*background-size: contain;*/
-    pointer-events: none;
-  }
-
   .dashboardStyle{
-    padding: 10px;
-    box-sizing: border-box;
-  }
-
-  .dashboardStyle1{
     width: 100%;
     height: 100%;
-  }
-  .dashboardStyle2{
-    width: 50%;
-    height: 100%;
-    float: left;
-  }
-  .dashboardStyle3{
-    width: 50%;
-    height: 100%;
-    float: left;
+    padding: 10px;
+    box-sizing: border-box;
   }
 
 </style>
