@@ -12,7 +12,7 @@
     	支持功能1"信息问卷调查"模块数据的实时统计，看板上所见即所得
     	支持第三方数据接入，数据导入完成后，看板上可查看统计数据
  
- ## 演示
+ ## 演示 
 ![image](https://github.com/JHerculesqz/FuckSARI/blob/master/demo1.gif)
 
  ## 部署
