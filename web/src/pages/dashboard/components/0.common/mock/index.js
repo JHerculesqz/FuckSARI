@@ -11,7 +11,7 @@ export default {
         "data": [
           {
             "name": "异常",
-            "value": 3.0
+            "value": Math.random()*100
           },
           {
             "name": "正常",

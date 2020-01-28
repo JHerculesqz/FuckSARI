@@ -5,7 +5,7 @@
         <marvel-dashboard title="人员状态分布">
           <div slot="customArea"></div>
           <div slot="contArea" style="height: 100%;overflow:auto;">
-            <dashboard1 @showHistory="_showHistory"></dashboard1>
+            <dashboard1 ref="dashboard2" @showHistory="_showHistory"></dashboard1>
           </div>
         </marvel-dashboard>
       </div>
@@ -15,7 +15,7 @@
         <marvel-dashboard title="人员地区分布">
           <div slot="customArea"></div>
           <div slot="contArea" style="height: 100%;overflow:auto;">
-            <dashboard2 @showHistory="_showHistory"></dashboard2>
+            <dashboard2 ref="dashboard1" @showHistory="_showHistory"></dashboard2>
           </div>
         </marvel-dashboard>
       </div>
@@ -25,13 +25,13 @@
         <marvel-dashboard title="人员反馈情况">
           <div slot="customArea"></div>
           <div slot="contArea" style="height: 100%;overflow:auto;">
-            <dashboard3 @showHistory="_showHistory"></dashboard3>
+            <dashboard3 ref="dashboard3" @showHistory="_showHistory"></dashboard3>
           </div>
         </marvel-dashboard>
       </div>
 
     </div>
-    <marvel-dialog :showDialog="showDialog" :canDrag="true" :hasFoot="false"
+    <marvel-dialog :showDialog="showDialog" :draggable="true" :hasFoot="false"
                    title="历史数据" :width="800" :height="600"
                    v-on:onClickDialogClose="_onClickDialogClose">
       <div v-if="showDialog" slot="dialogCont" style="width: 100%;height: 100%">
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+  import MarvelTimer from "~/component/timer";
   import HttpUtils from "./0.common/httpUtil/httpUtils";
   import FormList from "../../../components/form/formList";
   import MarvelDashboard from '~/widget/dboard/MarvelDashboard';
@@ -74,8 +75,14 @@
         /*region const*/
         debug: false,
         /*endregion*/
+        /*region dialog*/
         showDialog: false,
-        userId:""
+        userId:"",
+        /*endregion*/
+        /*region timer*/
+        timer: undefined,
+        timerInterval: 5000
+        /*endregion*/
       }
     },
     mounted: function () {
@@ -98,9 +105,11 @@
       //#region lifeCycle
 
       _initEx: function () {
+        this._startTimeInterval();
       },
 
       _destroyed: function () {
+        this._endTimeInterval();
       },
 
       //#endregion
@@ -121,7 +130,22 @@
             return oCell;
           }
         }
-      }
+      },
+      
+      _startTimeInterval: function () {
+        var self = this;
+        if (self.timer == undefined) {
+          self.timer = MarvelTimer.startTimer(function () {
+            self.$refs.dashboard1.refresh();
+            self.$refs.dashboard2.refresh();
+            self.$refs.dashboard3.refresh();
+          }, self.timerInterval);
+        }
+      },
+
+      _endTimeInterval: function () {
+        MarvelTimer.endTimer(this.timer);
+      },
 
       //#endregion
       //#region callback

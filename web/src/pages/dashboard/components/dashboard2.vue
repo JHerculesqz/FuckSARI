@@ -52,6 +52,8 @@
       return {
         /*region const*/
         debug: false,
+        oLastPieData: undefined,
+        oLastGridData: undefined,
         /*endregion*/
         /*region formLst*/
         formLst2:[{
@@ -152,13 +154,7 @@
       //#region lifeCycle
 
       _initEx: function () {
-        var self = this;
-        this._getPieData(function (oRes) {
-          self._setPieData(oRes);
-        });
-        this._getGridData(function (oRes) {
-          self._setGridData(oRes);
-        });
+        this.refresh();
       },
 
       _destroyed: function () {
@@ -187,8 +183,12 @@
       },
 
       _setPieData: function(oRes){
-        oRes.radius = "50%";
-        this.$refs.refPie2.setData(oRes);
+        if(JSON.stringify(this.oLastPieData) != JSON.stringify(oRes)){
+          this.oLastPieData = oRes;
+          var oOption = JSON.parse(JSON.stringify(oRes));
+          oOption.radius = "50%";
+          this.$refs.refPie2.setData(oOption);
+        }
       },
 
       _getGridData: function(oAfterCallback){
@@ -215,27 +215,29 @@
       },
 
       _setGridData: function(oRes){
-        this.totalNum = oRes.count;
-        var arrRows = [];
-        var arrRowsVo = JSON.parse(JSON.stringify(oRes.rowVos));
-        for(var i = 0; i< arrRowsVo.length; i++){
-          var oRow = arrRowsVo[i].cellVos;
-          oRow.push({
-            key: "id",
-            value: StrUtils.uuid(),
-          });
-          oRow.push({
-            key: "operation",
-            value: [{
-              value: "icon-stats-dots",
-              color: "#3399ff",
-              label: "查看历史数据"
-            }]
-          });
-
-          arrRows.push(oRow);
+        if(JSON.stringify(this.oLastGridData) != JSON.stringify(oRes)){
+          this.oLastGridData = oRes;
+          this.totalNum = oRes.count;
+          var arrRows = [];
+          var arrRowsVo = JSON.parse(JSON.stringify(oRes.rowVos));
+          for(var i = 0; i< arrRowsVo.length; i++){
+            var oRow = arrRowsVo[i].cellVos;
+            oRow.push({
+              key: "id",
+              value: StrUtils.uuid(),
+            });
+            oRow.push({
+              key: "operation",
+              value: [{
+                value: "icon-stats-dots",
+                color: "#3399ff",
+                label: "查看历史数据"
+              }]
+            });
+            arrRows.push(oRow);
+          }
+          this.rows = JSON.parse(JSON.stringify(arrRows));
         }
-        this.rows = JSON.parse(JSON.stringify(arrRows));
       },
 
       _onBtnClick: function (strBtnKey) {
@@ -261,6 +263,17 @@
       //#region callback
       //#endregion
       //#region 3rd
+
+      refresh: function () {
+        var self = this;
+        this._getPieData(function (oRes) {
+          self._setPieData(oRes);
+        });
+        this._getGridData(function (oRes) {
+          self._setGridData(oRes);
+        });
+      },
+
       //#endregion
     }
   }
