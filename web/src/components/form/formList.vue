@@ -46,7 +46,7 @@
                         @onBlur="_onBlur4Input(arguments, item)"></marvel-input>
         </div>
         <div class="rightBtnArea">
-          <marvel-button size="mini" :ref="item.btnKey" :label="item.btnName"
+          <marvel-button :ref="item.btnKey" :label="item.btnName"
                          classCustom="classCustom4BtnInForm"
                          v-on:onClick="_callBack4OnBtnClick(item.btnKey)"></marvel-button>
         </div>
@@ -313,7 +313,6 @@
       _onRadioBoxesChange: function (oRadioBoxes) {
         var strKey = oRadioBoxes.key;
         var strValue = this.$refs[oRadioBoxes.radioLst[0].key][0].getCheckItem();
-        console.log(strValue);
         this._callBack4OnRadioBoxesChange(strKey, strValue);
       },
 
@@ -502,6 +501,8 @@
   }
 
   .formItemArea4Radios {
+    position: relative;
+    top: 8px;
   }
 
   .formItemArea4Radios .formItem4Radio {
@@ -573,141 +574,4 @@
   .darkGray .labelArea {
     color: #ccc;
   }
-</style>
-
-<style>
-  /*region basic*/
-
-  *{
-    font-family: "Microsoft YaHei", "arial",sans-serif;
-  }
-  ::-webkit-scrollbar{
-    width:8px;
-    height:8px;
-    background-color: rgba(0,0,0,0);
-  }
-  ::-webkit-scrollbar-track{
-    border-radius: 10px;
-    background-color: rgba(0,0,0,0);
-  }
-  ::-webkit-scrollbar-thumb{
-    border-radius: 10px;
-    background-color: #aaa;
-  }
-
-  /*endregion*/
-  * {
-    box-sizing: border-box
-  }
-
-  .radioWrapper {
-    display: inline-block;
-  }
-
-  .dpn {
-    display: none;
-  }
-
-  .wfWidget .radioWrapper .radio {
-    width: 12px !important;
-    height: 12px !important;;
-    position: relative;
-    top: 4px;
-    float: left;
-  }
-
-  .wfWidget .radioWrapper .radio input[type=radio] {
-    /*pos*/
-    margin: 0;
-    padding: 0;
-    /*style*/
-    visibility: hidden;
-  }
-
-  .wfWidget .radioWrapper .radio input[type=radio]:checked + label:after {
-    /*pos*/
-    /*style*/
-    opacity: 1;
-    border-top: none;
-    border-right: none;
-  }
-
-  .wfWidget .radioWrapper .radio input[type=radio]:checked + label {
-    /*pos*/
-    /*style*/
-    background-color: #3399ff;
-  }
-
-  .wfWidget .radioWrapper .radio input[type=radio]:disabled + label:after {
-    /*pos*/
-    /*style*/
-    background-color: #aaa;
-  }
-
-  .wfWidget .radioWrapper .radio input[type=radio]:disabled + label {
-    /*pos*/
-    /*style*/
-    border: 1px solid #999999;
-    background-color: #f0f0f0;
-    pointer-events: none;
-  }
-
-  .wfWidget .radioWrapper .radio label {
-    /*pos*/
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    margin: 0;
-    padding: 0;
-    /*style*/
-    cursor: pointer;
-    border: 1px solid #ccc;
-    border-radius: 100%;
-    -webkit-transition: all .5s ease;
-    -moz-transition: all .5s ease;
-    -ms-transition: all .5s ease;
-    -o-transition: all .5s ease;
-    transition: all .5s ease;
-  }
-
-  .wfWidget .radioWrapper .radio label:hover {
-    border: 1px solid #60b0ff;
-  }
-
-  .wfWidget .radioWrapper .radio label:after {
-    /*pos*/
-    position: absolute;
-    width: 4px !important;
-    height: 4px !important;
-    border-radius: 100%;
-    top: 3px !important;
-    left: 3px !important;
-    /*style*/
-    opacity: 0;
-    content: '';
-    background-color: #fff;
-  }
-
-  .wfWidget .radioWrapper .radioLabel {
-    margin: 0 0 0 5px;
-    width: calc(100% - 18px);
-    white-space: nowrap;
-    overflow: visible !important;
-    text-overflow: unset !important;;
-    padding: 0;
-    float: left;
-    font-size: 12px !important;
-    line-height: 20px !important;
-    color: #666666;
-  }
-
-  /*region dark theme*/
-
-  .darkGray .wfWidget .radioWrapper .radioLabel {
-    color: #ccc;
-  }
-
-  /*endregion*/
 </style>

@@ -8,8 +8,10 @@
     "start": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "dev": "npm run start -- --env.name=all",
     "start-index": "npm run start -- --env.name=index",
+    "start-dashboard": "npm run start -- --env.name=dashboard",
     "build": "node build/buildAll.js",
-    "build-index": "node build/build.js index"
+    "build-index": "node build/build.js index",
+    "build-dashboard": "node build/build.js dashboard"
   },
   "dependencies": {
     "vue": "^2.6.6",
