@@ -14,7 +14,9 @@
  
  ## 演示
 
-![1KIQoV.gif](https://s2.ax1x.com/2020/01/28/1KIQoV.gif)
+信息问卷调查演示:[https://s2.ax1x.com/2020/01/28/1KIQoV.gif](https://s2.ax1x.com/2020/01/28/1KIQoV.gif "信息问卷调查模块演示")
+
+健康信息看板演示:[https://s2.ax1x.com/2020/01/28/1Kbl28.gif](https://s2.ax1x.com/2020/01/28/1Kbl28.gif "健康信息看板")
 
  ## 部署
 	
