@@ -20,6 +20,7 @@
 </template>
 
 <script>
+  import Bus from "~/core/bus";
   import HttpUtils from "./0.common/httpUtil/httpUtils";
   import FormList from "../../../components/form/formList";
   import MarvelButton from '~/widget/btn/MarvelButton';
@@ -419,10 +420,32 @@
         };
         if(this.debug){
           console.log(reqBody);
+          // var oOptions = {
+          //   status: "2",
+          //   content: "提交失败!"
+          // };
+          // Bus.$emit('msg', 'add-prompt4Phone', oOptions);
+          var oOptions = {
+            status: "0",
+            content: "提交成功!"
+          };
+          Bus.$emit('msg', 'add-prompt4Phone', oOptions);
           return oValue;
         }else{
           HttpUtils.post("upsertUserInfo", reqBody).then(res => {
-
+            if(res && res.body && res.body.ok == true){
+              var oOptions = {
+                status: "0",
+                content: "提交成功!"
+              };
+              Bus.$emit('msg', 'add-prompt4Phone', oOptions);
+            }else{
+              var oOptions = {
+                status: "2",
+                content: "提交失败!"
+              };
+              Bus.$emit('msg', 'add-prompt4Phone', oOptions);
+            }
           });
         }
       },
