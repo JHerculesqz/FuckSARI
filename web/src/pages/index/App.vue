@@ -17,6 +17,11 @@
                     v-on:onClickOK="_onConfirmExOk"
                     v-on:onClickCancel="_onConfirmExCancel"></marvel-confirm>
     <marvel-prompt :oPrompts="globalPrompt" :disposeTimeOut="disposeTimeOut"></marvel-prompt>
+    <marvel-prompt4-phone :oPrompts="globalPrompt4Phone" :disposeTimeOut="disposeTimeOut4Phone"></marvel-prompt4-phone>
+    <div v-show="showCoverPage" class="coverPage" :class="coverPageStatus">
+      <div class="icon" :class="coverPageIcon"></div>
+      <div class="text" v-html="coverPageText"></div>
+    </div>
   </div>
 </template>
 
@@ -25,9 +30,11 @@
   import MarvelLoading from "~/widget/load/MarvelLoading";
   import MarvelConfirm from "~/widget/confirm/MarvelConfirm";
   import MarvelPrompt from "~/widget/prompting/MarvelPrompt";
+  import MarvelPrompt4Phone from "../../components/newWidget/MarvelPrompt4Phone";
 
   export default {
     components: {
+      MarvelPrompt4Phone,
       MarvelLoading,
       MarvelConfirm,
       MarvelPrompt,
@@ -49,8 +56,18 @@
         //#endregion
         //#region prompt
         globalPrompt: [],
-        disposeTimeOut: 3000,
+        disposeTimeOut: 2000,
         //#endregion
+        //#region prompt4Phone
+        globalPrompt4Phone: [],
+        disposeTimeOut4Phone: 2000,
+        //#endregion
+        /*region coverPage*/
+        coverPageStatus:"",
+        showCoverPage:false,
+        coverPageIcon:"",
+        coverPageText:""
+        /*endregion*/
       }
     },
     mounted: function () {
@@ -58,9 +75,9 @@
       this._initEx();
       //#endregion
     },
-    beforeDestroyed: function () {
+    beforeDestroy: function () {
       //#region custom
-      this._destory();
+      this._destroyed();
       //#endregion
     },
     methods: {
@@ -81,6 +98,10 @@
             this._showConfirmEx(params)
           } else if (e == "add-prompt") {
             this._addPrompt(params)
+          } else if (e == "add-prompt4Phone") {
+            this._addPrompt4Phone(params)
+          }else if (e == "show-cover-page") {
+            this._showCoverPage(params)
           }
         })
       },
@@ -122,6 +143,27 @@
 
       _addPrompt: function (oParams) {
         this.globalPrompt.push(oParams);
+      },
+
+      _addPrompt4Phone: function (oParams) {
+        this.globalPrompt4Phone.push(oParams);
+      },
+
+      _showCoverPage: function (oParams) {
+        if (oParams.status == '0') {
+          this.coverPageStatus = 'promptInfo';
+          this.coverPageIcon = "icon-smile";
+        }else if (oParams.status == '1') {
+          this.coverPageStatus = 'promptTip';
+          this.coverPageIcon = "icon-shocked";
+        } else {
+          this.coverPageStatus = 'promptError';
+          this.coverPageIcon = "icon-sad";
+        }
+
+        this.coverPageText = oParams.content;
+
+        this.showCoverPage = true;
       },
 
       //#endregion
@@ -172,7 +214,7 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: auto;
+    overflow: hidden;
     font-family: Tahoma, Arial, Roboto, ”Droid Sans”, ”Helvetica Neue”, ”Droid Sans Fallback”, ”Heiti SC”, sans-self;
   }
 
@@ -185,5 +227,75 @@
   .content {
     height: 100%;
     position: relative;
+  }
+
+  .coverPage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 30% 0;
+    box-sizing: border-box;
+
+    /*background: url("../../../static/images/dun.svg") no-repeat center;*/
+    background-color: #ffffff;
+    /*background-size: contain;*/
+
+    animation:move 0.3s;
+    -moz-animation:move 0.3s; /* Firefox */
+    -webkit-animation:move 0.3s; /* Safari and Chrome */
+    -o-animation:move 0.3s; /* Opera */
+  }
+
+  @keyframes move
+  {
+    from {top: 100%;}
+    to {top: 0;}
+  }
+
+  @-moz-keyframes move /* Firefox */
+  {
+    from {top: 100%;}
+    to {top: 0;}
+  }
+
+  @-webkit-keyframes move /* Safari and Chrome */
+  {
+    from {top: 100%;}
+    to {top: 0;}
+  }
+
+  @-o-keyframes move /* Opera */
+  {
+    from {top: 100%;}
+    to {top: 0;}
+  }
+
+  .coverPage .icon {
+    width: 100%;
+    height: 200px;
+    line-height: 200px;
+    font-size: 120px;
+    text-align: center;
+  }
+
+  .promptInfo .icon {
+    color: #3dcca6;
+  }
+
+  .promptTip .icon {
+    color: #3399ff;
+  }
+
+  .promptError .icon {
+    color: #ff4c4c;
+  }
+
+  .coverPage .text {
+    box-sizing: border-box;
+    font-size: 24px;
+    text-align: center;
+    color: #999;
   }
 </style>
