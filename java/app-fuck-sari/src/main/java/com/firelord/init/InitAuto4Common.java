@@ -76,7 +76,7 @@ public class InitAuto4Common {
                     DateUtilsEx.JDK_FORMAT1, DateUtilsEx.JDK_FORMAT2);
             String strUserID1 = Convert.toString(OfficeXlsxUtilsEx.getCell(5, oRow));
             String strUserID2 = Convert.toString(OfficeXlsxUtilsEx.getCell(6, oRow));
-            String strUserID = strUserID2 + "/" + strUserID1;
+            String strUserID = strUserID2;//strUserID2 + "/" + strUserID1;
             String strUserGroup = OfficeXlsxUtilsEx.getCell(8, oRow).toString();
             Double iTemperature = Convert.toDouble(OfficeXlsxUtilsEx.getCell(10, oRow));
             String strLocation1 = OfficeXlsxUtilsEx.getCell(11, oRow).toString();
