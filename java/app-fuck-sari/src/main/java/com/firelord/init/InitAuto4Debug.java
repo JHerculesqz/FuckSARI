@@ -22,7 +22,8 @@ public class InitAuto4Debug extends InitAuto4Common implements IInitAuto {
     public void run() {
         log.info(LOG_INIT_AUTO + "start...");
 
-        this.initWhiteList("C:/test/FuckSARI/");
+        this.initWhiteList("C:/test/FuckSARI/whitelist");
+        this.init3rdData("C:/test/FuckSARI/3rd");
 
         log.info(LOG_INIT_AUTO + "end...");
     }
