@@ -36,7 +36,7 @@ var API = {
   upsertUserInfo:{
     url: "/upsertUserInfo",
     loading:false,
-    checkRes:true,
+    checkRes:false,
     desc:R,
     errorAdvice:errorAdvice
   }

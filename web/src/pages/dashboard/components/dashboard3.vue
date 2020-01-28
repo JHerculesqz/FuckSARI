@@ -1,13 +1,13 @@
 <template>
   <div class="dashboardWrapper">
     <div class="leftArea">
-      <marvel-chart-pie ref="refPie3" id="refPie3" theme=""></marvel-chart-pie>
+      <marvel-chart-pie ref="refPie3" id="refPie3" theme="dark"></marvel-chart-pie>
     </div>
     <div class="rightArea">
       <div class="rightAreaTop">
         <form-list ref="formLst3" :columnNum=1 :formLst="formLst3" @onRadioBoxesChange="_onRadioBoxesChange"></form-list>
       </div>
-      <div class="rightAreaBottom">
+      <div class="rightAreaBottom wfMarvelTable">
         <marvel-table ref="formTable3"
                       gridId="formTable3"
                       :titles="titles"
@@ -195,6 +195,7 @@
           this.oLastPieData = oRes;
           var oOption = JSON.parse(JSON.stringify(oRes));
           oOption.radius = "50%";
+          oOption.backgroundColor = "rgba(0,0,0,0)";
           this.$refs.refPie3.setData(oOption);
         }
       },
@@ -300,13 +301,13 @@
   }
 
   .leftArea{
-    width: 400px;
+    width: 600px;
     height: 100%;
     float: left;
   }
 
   .rightArea{
-    width: calc(100% - 410px);
+    width: calc(100% - 610px);
     height: 100%;
     float: left;
   }

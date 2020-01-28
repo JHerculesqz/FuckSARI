@@ -1,6 +1,6 @@
 <template>
   <div class="dialogContWrapper">
-    <marvel-chart-line ref="chartLine" id="chartLine"></marvel-chart-line>
+    <marvel-chart-line ref="chartLine" id="chartLine" theme="dark"></marvel-chart-line>
   </div>
 </template>
 
@@ -89,6 +89,10 @@
         var self = this;
         var oOption = {
           title: "",
+          backgroundColor: "rgba(0,0,0,0)",
+          splitLine: true,
+          min:"dataMin",
+          max:"dataMax",
           data: []
         };
         oOption.data = JSON.parse(JSON.stringify(oRes.pointVoList));
