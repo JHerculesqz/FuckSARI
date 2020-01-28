@@ -26,17 +26,24 @@ var D = "delete data";
 var T = "trigger";
 
 var API = {
-  getAutoUserInfoByUserID:{
-    url: "/getAutoUserInfoByUserID",
+  getPieData:{
+    url: "/getPieData",
     loading:false,
     checkRes:true,
     desc:R,
     errorAdvice:errorAdvice
   },
-  upsertUserInfo:{
-    url: "/upsertUserInfo",
+  getGridData:{
+    url: "/getGridData",
     loading:false,
-    checkRes:false,
+    checkRes:true,
+    desc:R,
+    errorAdvice:errorAdvice
+  },
+  getLineDataHistory:{
+    url: "/getLineDataHistory",
+    loading:false,
+    checkRes:true,
     desc:R,
     errorAdvice:errorAdvice
   }
