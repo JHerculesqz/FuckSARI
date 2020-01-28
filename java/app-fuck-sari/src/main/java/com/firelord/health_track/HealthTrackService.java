@@ -179,10 +179,12 @@ public class HealthTrackService {
         List<TBLHealthTrackUserHistory> lstRes = this.tblHealthTrackUserHistoryRepository.
                 findByUserId(oInVo.getUserId());
         LineVo oLineVo = new LineVo();
+        oLineVo.setTitle("体温曲线");
         for (TBLHealthTrackUserHistory oTBLHealthTrackUser : lstRes) {
             PointVo oPointVo = new PointVo();
-            oPointVo.setKey(oTBLHealthTrackUser.getFeedBackTime());
-            oPointVo.setValue(oTBLHealthTrackUser.getTemperature());
+            oPointVo.setName(oTBLHealthTrackUser.getFeedBackTime());
+            oPointVo.getValue().add(oTBLHealthTrackUser.getFeedBackTime());
+            oPointVo.getValue().add(oTBLHealthTrackUser.getTemperature());
             oLineVo.getPointVoList().add(oPointVo);
         }
 

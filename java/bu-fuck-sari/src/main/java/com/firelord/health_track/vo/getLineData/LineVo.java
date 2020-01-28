@@ -13,6 +13,10 @@ public class LineVo {
 
     @Setter
     @Getter
+    private String title;
+
+    @Setter
+    @Getter
     private List<PointVo> pointVoList = new ArrayList<>();
 
     //#endregion
