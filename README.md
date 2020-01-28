@@ -13,7 +13,7 @@
     	支持第三方数据接入，数据导入完成后，看板上可查看统计数据
  
  ## 演示
-![image](https://github.com/JHerculesqz/FuckSARI/blob/master/demo1.gif)
+![image](https://s2.ax1x.com/2020/01/28/1KIQoV.gif)
 
  ## 部署
 	
